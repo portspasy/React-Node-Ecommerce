@@ -3,11 +3,21 @@ const router = express.Router();
 const {
   getProducts,
   getProductById,
+  deleteProduct,
+  createProduct,
+  updateProduct,
+  createProductReview,
 } = require("../controllers/productController");
-// get all the products
-router.route("/").get(getProducts);
+const { protect, isAdmin } = require("../middleware/authMiddleware");
 
-// get a single product by id
-router.route("/:id").get(getProductById);
+router.route("/").get(getProducts).post(protect, isAdmin, createProduct);
+
+router.route("/:id/reviews").post(protect, createProductReview);
+
+router
+  .route("/:id")
+  .get(getProductById)
+  .delete(protect, isAdmin, deleteProduct)
+  .put(protect, isAdmin, updateProduct);
 
 module.exports = router;

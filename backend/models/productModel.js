@@ -1,23 +1,23 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const reviewSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
+const reviewSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    rating: { type: Number, required: true },
+    comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
-  comment: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
-// Creating mongoose Schema
-const productSchema = new Schema(
+const productSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,15 +28,15 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+      required: true,
+    },
     brand: {
       type: String,
       required: true,
     },
     category: {
-      type: String,
-      required: true,
-    },
-    image: {
       type: String,
       required: true,
     },

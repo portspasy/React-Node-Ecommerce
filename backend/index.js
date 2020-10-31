@@ -1,6 +1,8 @@
+const path = require("path");
 const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
+const morgan = require("morgan");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 const connectDB = require("./config/db");
@@ -8,12 +10,17 @@ const connectDB = require("./config/db");
 const productRoute = require("./routes/productRoute");
 const userRoute = require("./routes/userRoute");
 const orderRoute = require("./routes/orderRoute");
+const uploadRoute = require("./routes/uploadRoute");
 
 dotenv.config();
 
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(express.json());
 
@@ -24,11 +31,18 @@ app.get("/", function (req, res) {
 app.use("/api/products", productRoute);
 app.use("/api/users", userRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/upload", uploadRoute);
 
 //for paypal router
-app.use("/api/config/paypal", (req, res) =>
+app.get("/api/config/paypal", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+// app.use("/api/config/paypal", (req, res) =>
+//   res.send(process.env.PAYPAL_CLIENT_ID)
+// );
+
+const _dirname = path.resolve();
+app.use("/uploads", express.static(path.join(_dirname, "/uploads")));
 
 app.use(notFound);
 app.use(errorHandler);

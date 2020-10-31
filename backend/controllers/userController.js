@@ -116,7 +116,6 @@ const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
   res.json(users);
 });
-
 // Delete User
 // Delete request
 // access Private/Admin
@@ -169,7 +168,6 @@ const updateUserAdmin = asyncHandler(async (req, res) => {
     throw new Error("User not found!");
   }
 });
-
 module.exports = {
   authUser,
   registerUser,

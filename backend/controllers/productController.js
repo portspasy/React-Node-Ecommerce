@@ -102,7 +102,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-/// @desc    Create new review
+/// @desc   Create new review
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
@@ -143,6 +143,16 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
+/// @desc   Get top rated products
+// @route   GET /api/products/top
+// @access  Pulbic
+const getTopProducts = asyncHandler(async (req, res) => {
+  // sorted by ascending order (-1)
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.json(products);
+});
+
 module.exports = {
   getProducts,
   getProductById,
@@ -150,4 +160,5 @@ module.exports = {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 };
